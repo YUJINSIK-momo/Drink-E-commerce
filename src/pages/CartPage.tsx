@@ -10,7 +10,7 @@ export default function CartPage() {
     <div className="max-w-4xl mx-auto px-6 py-12">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 flex items-center gap-2 mb-8">
-        <Link to="/" className="hover:text-gray-700">Home</Link>
+        <Link to="/" className="hover:text-gray-700">{t.home2}</Link>
         <span>/</span>
         <span className="text-gray-800">{t.cart.title}</span>
       </nav>
@@ -37,7 +37,7 @@ export default function CartPage() {
             to="/fruits"
             className="inline-block bg-green-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors"
           >
-            商品を見る
+            {t.allProducts}
           </Link>
         </div>
       ) : (
@@ -98,20 +98,20 @@ export default function CartPage() {
           {/* Summary */}
           <div>
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sticky top-24">
-              <h2 className="font-bold text-gray-800 mb-4">注文概要</h2>
+              <h2 className="font-bold text-gray-800 mb-4">{t.cart.summary}</h2>
               <div className="space-y-3 text-sm mb-4">
                 <div className="flex justify-between text-gray-600">
-                  <span>小計</span>
+                  <span>{t.cart.subtotal}</span>
                   <span>¥{total.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>配送料</span>
+                  <span>{t.cart.shipping}</span>
                   <span className={total >= 3000 ? "text-green-600" : ""}>
-                    {total >= 3000 ? "無料" : "¥500"}
+                    {total >= 3000 ? t.cart.free : "¥500"}
                   </span>
                 </div>
                 {total >= 3000 && (
-                  <p className="text-green-600 text-xs">✓ 送料無料が適用されます</p>
+                  <p className="text-green-600 text-xs">{t.cart.freeShippingNote}</p>
                 )}
                 <div className="border-t border-gray-100 pt-3 flex justify-between font-bold text-gray-800 text-base">
                   <span>{t.cart.total}</span>
@@ -125,7 +125,7 @@ export default function CartPage() {
                 to="/fruits"
                 className="block text-center text-sm text-gray-500 hover:text-gray-700 transition-colors"
               >
-                ← 買い物を続ける
+                {t.cart.continueShopping}
               </Link>
             </div>
           </div>

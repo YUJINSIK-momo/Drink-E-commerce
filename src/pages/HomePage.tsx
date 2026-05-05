@@ -7,31 +7,11 @@ import { products } from "../data/products"
 
 const BASE = "/Drink-E-commerce"
 
-const heroSlides = [
-  {
-    image: `${BASE}/images/keyvisual1.jpg`,
-    titleJa: "自然の恵みを、そのまま。",
-    subtitleJa: "100%国産フルーツジュース",
-    bg: "from-green-900/60",
-  },
-  {
-    image: `${BASE}/images/keyvisual2.jpg`,
-    titleJa: "新鮮な野菜を、毎日に。",
-    subtitleJa: "U Ma! Vegetable Series",
-    bg: "from-orange-900/60",
-  },
-  {
-    image: `${BASE}/images/keyvisual3.jpg`,
-    titleJa: "青森の大地から届ける。",
-    subtitleJa: "無加熱・無添加・国産素材",
-    bg: "from-emerald-900/60",
-  },
-  {
-    image: `${BASE}/images/keyvisual4.jpg`,
-    titleJa: "体に優しい、本物の味。",
-    subtitleJa: "U Ma! Fruits Premium Line",
-    bg: "from-teal-900/60",
-  },
+const heroSlidesMeta = [
+  { image: `${BASE}/images/keyvisual1.jpg`, bg: "from-green-900/60" },
+  { image: `${BASE}/images/keyvisual2.jpg`, bg: "from-orange-900/60" },
+  { image: `${BASE}/images/keyvisual3.jpg`, bg: "from-emerald-900/60" },
+  { image: `${BASE}/images/keyvisual4.jpg`, bg: "from-teal-900/60" },
 ]
 
 const reviews = [
@@ -98,7 +78,7 @@ export default function HomePage() {
   useEffect(() => {
     if (!isPlaying) return
     const timer = setInterval(() => {
-      setHeroIndex((i) => (i + 1) % heroSlides.length)
+      setHeroIndex((i) => (i + 1) % heroSlidesMeta.length)
     }, 4000)
     return () => clearInterval(timer)
   }, [isPlaying])
@@ -110,7 +90,7 @@ export default function HomePage() {
     <div className="w-full">
       {/* ── Hero Carousel ── */}
       <section className="relative h-[70vh] min-h-[480px] max-h-[700px] overflow-hidden w-full">
-        {heroSlides.map((slide, i) => (
+        {heroSlidesMeta.map((slide, i) => (
           <div
             key={i}
             className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -119,7 +99,7 @@ export default function HomePage() {
           >
             <img
               src={slide.image}
-              alt={slide.titleJa}
+              alt={t.home.heroSlides[i]?.title ?? ""}
               className="w-full h-full object-cover"
               onError={(e) => {
                 const el = e.target as HTMLImageElement
@@ -141,9 +121,9 @@ export default function HomePage() {
                     U Ma! Fruits
                   </p>
                   <h1 className="text-white text-4xl md:text-6xl font-bold mb-4 leading-tight drop-shadow-lg">
-                    {slide.titleJa}
+                    {t.home.heroSlides[i]?.title}
                   </h1>
-                  <p className="text-white/90 text-lg md:text-xl mb-8 drop-shadow">{slide.subtitleJa}</p>
+                  <p className="text-white/90 text-lg md:text-xl mb-8 drop-shadow">{t.home.heroSlides[i]?.subtitle}</p>
                   <div className="flex gap-4 flex-wrap">
                     <Link
                       to="/fruits"
@@ -166,7 +146,7 @@ export default function HomePage() {
 
         {/* Dots */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3">
-          {heroSlides.map((_, i) => (
+          {heroSlidesMeta.map((_, i) => (
             <button
               key={i}
               onClick={() => setHeroIndex(i)}
@@ -193,7 +173,7 @@ export default function HomePage() {
 
         {/* Arrows */}
         <button
-          onClick={() => setHeroIndex((i) => (i - 1 + heroSlides.length) % heroSlides.length)}
+          onClick={() => setHeroIndex((i) => (i - 1 + heroSlidesMeta.length) % heroSlidesMeta.length)}
           className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm text-white rounded-full flex items-center justify-center hover:bg-white/40 transition-colors"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,7 +181,7 @@ export default function HomePage() {
           </svg>
         </button>
         <button
-          onClick={() => setHeroIndex((i) => (i + 1) % heroSlides.length)}
+          onClick={() => setHeroIndex((i) => (i + 1) % heroSlidesMeta.length)}
           className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm text-white rounded-full flex items-center justify-center hover:bg-white/40 transition-colors"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,14 +195,14 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
             {[
-              { icon: "🌿", text: "100%国産素材" },
-              { icon: "🔥", text: "無加熱製法" },
-              { icon: "🚚", text: "3000円以上送料無料" },
-              { icon: "♻️", text: "添加物不使用" },
+              { icon: "🌿", key: 0 },
+              { icon: "🔥", key: 1 },
+              { icon: "🚚", key: 2 },
+              { icon: "♻️", key: 3 },
             ].map((f) => (
-              <div key={f.text} className="flex items-center justify-center gap-2">
+              <div key={f.key} className="flex items-center justify-center gap-2">
                 <span className="text-lg">{f.icon}</span>
-                <span className="font-medium">{f.text}</span>
+                <span className="font-medium">{t.home.features[f.key]}</span>
               </div>
             ))}
           </div>
@@ -276,7 +256,7 @@ export default function HomePage() {
               to="/company"
               className="border border-white/50 text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors"
             >
-              会社情報
+              {t.home.companyInfoLink}
             </Link>
           </div>
         </div>
@@ -308,13 +288,10 @@ export default function HomePage() {
             <h2 className="text-2xl md:text-3xl font-bold text-gray-800">{t.home.seasonalTitle}</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {[
-              { img: `${BASE}/images/partners_img1.jpg`, label: "りんごの秘密" },
-              { img: `${BASE}/images/partners_img2.jpg`, label: "ビタミンC" },
-              { img: `${BASE}/images/partners_img3.jpg`, label: "無加熱製法" },
-              { img: `${BASE}/images/partners_img4.jpg`, label: "産地直送" },
-              { img: `${BASE}/images/partners_img5.jpg`, label: "健康習慣" },
-            ].map((item, i) => (
+            {[1, 2, 3, 4, 5].map((n, i) => ({
+              img: `${BASE}/images/partners_img${n}.jpg`,
+              label: t.home.knowledge[i] ?? "",
+            })).map((item, i) => (
               <div
                 key={i}
                 className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer group"

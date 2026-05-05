@@ -8,7 +8,7 @@ export default function MapPage() {
     <div className="max-w-4xl mx-auto px-6 py-12">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 flex items-center gap-2 mb-8">
-        <Link to="/" className="hover:text-gray-700">Home</Link>
+        <Link to="/" className="hover:text-gray-700">{t.home2}</Link>
         <span>/</span>
         <span className="text-gray-800">{t.map.title}</span>
       </nav>
@@ -32,33 +32,32 @@ export default function MapPage() {
       {/* Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-bold text-gray-800 mb-4">会社情報</h2>
+          <h2 className="font-bold text-gray-800 mb-4">{t.company.title}</h2>
           <div className="space-y-3 text-sm text-gray-600">
             <div className="flex items-start gap-3">
               <span className="text-green-600 font-bold mt-0.5 flex-shrink-0">📍</span>
               <div>
-                <p className="font-medium text-gray-700">(株)U Ma!Fruits</p>
-                <p>〒034-0301</p>
-                <p>青森県十和田市2-14-8</p>
+                <p className="font-medium text-gray-700">{t.company.values.name}</p>
+                <p>{t.company.values.address}</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-bold text-gray-800 mb-4">営業時間</h2>
+          <h2 className="font-bold text-gray-800 mb-4">{t.map.hours}</h2>
           <div className="space-y-2 text-sm text-gray-600">
             <div className="flex justify-between">
-              <span>月〜金</span>
-              <span className="font-medium text-gray-800">9:00〜18:00</span>
+              <span>{t.map.weekday}</span>
+              <span className="font-medium text-gray-800">{t.map.weekdayHours}</span>
             </div>
             <div className="flex justify-between">
-              <span>土</span>
-              <span className="text-gray-400">定休日</span>
+              <span>{t.map.saturday}</span>
+              <span className="text-gray-400">{t.map.closed}</span>
             </div>
             <div className="flex justify-between">
-              <span>日・祝</span>
-              <span className="text-gray-400">定休日</span>
+              <span>{t.map.sundayHoliday}</span>
+              <span className="text-gray-400">{t.map.closed}</span>
             </div>
           </div>
         </div>

@@ -22,9 +22,9 @@ export default function ProductDetailPage() {
   if (!product) {
     return (
       <div className="max-w-6xl mx-auto px-6 py-20 text-center">
-        <p className="text-gray-500 text-lg">商品が見つかりません</p>
+        <p className="text-gray-500 text-lg">{t.faq.noResult}</p>
         <Link to="/" className="text-green-600 hover:underline mt-4 block">
-          ホームに戻る
+          {t.back}
         </Link>
       </div>
     )
@@ -57,7 +57,7 @@ export default function ProductDetailPage() {
     <div className="max-w-6xl mx-auto px-6 py-8">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 flex items-center gap-2 mb-8 flex-wrap">
-        <Link to="/" className="hover:text-gray-700">Home</Link>
+        <Link to="/" className="hover:text-gray-700">{t.home2}</Link>
         <span>/</span>
         <Link
           to={product.category === "fruits" ? "/fruits" : "/vegetables"}
@@ -141,19 +141,19 @@ export default function ProductDetailPage() {
           {/* Product info */}
           <div className="bg-gray-50 rounded-xl p-4 mb-6 text-sm space-y-2">
             <div className="flex gap-3">
-              <span className="text-gray-500 w-20 flex-shrink-0">種類</span>
-              <span className="text-gray-800">通常品</span>
+              <span className="text-gray-500 w-20 flex-shrink-0">{t.product.productType}</span>
+              <span className="text-gray-800">{t.product.normalProduct}</span>
             </div>
             <div className="flex gap-3">
               <span className="text-gray-500 w-20 flex-shrink-0">{t.product.volume}</span>
               <span className="text-gray-800">{product.volume}（x1）</span>
             </div>
             <div className="flex gap-3">
-              <span className="text-gray-500 w-20 flex-shrink-0">容器種類</span>
-              <span className="text-gray-800">ペットボトル</span>
+              <span className="text-gray-500 w-20 flex-shrink-0">{t.product.containerType}</span>
+              <span className="text-gray-800">{t.product.petBottle}</span>
             </div>
             <div className="flex gap-3">
-              <span className="text-gray-500 w-20 flex-shrink-0">配送</span>
+              <span className="text-gray-500 w-20 flex-shrink-0">{t.product.deliveryInfo}</span>
               <span className="text-gray-800">{t.product.deliveryDays}</span>
             </div>
           </div>
@@ -188,7 +188,7 @@ export default function ProductDetailPage() {
                   : "bg-green-600 text-white hover:bg-green-700"
               }`}
             >
-              {added ? "✓ カートに追加しました" : `🛒 ${t.product.addToCart}`}
+              {added ? `✓ ${t.product.addedToCart}` : `🛒 ${t.product.addToCart}`}
             </button>
             <button className="w-full py-3.5 rounded-full font-semibold border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
               ❤️ {t.product.addToFavorite}
@@ -241,16 +241,16 @@ export default function ProductDetailPage() {
       <div className="mb-16">
         {tab === "detail" && (
           <div className="max-w-2xl">
-            <h3 className="font-semibold text-gray-800 mb-4 text-lg">商品情報</h3>
+            <h3 className="font-semibold text-gray-800 mb-4 text-lg">{t.product.detailTableTitle}</h3>
             <table className="w-full text-sm border-collapse">
               <tbody>
                 {[
-                  { label: "商品名", value: product.name[lang] },
-                  { label: "フレーバー", value: product.flavor[lang] },
-                  { label: "容量", value: product.volume },
-                  { label: "製造", value: product.origin },
-                  { label: "賞味期限", value: product.expiry },
-                  { label: "JANコード", value: product.jan },
+                  { label: t.product.detail, value: product.name[lang] },
+                  { label: t.product.category, value: product.flavor[lang] },
+                  { label: t.product.volume, value: product.volume },
+                  { label: t.product.origin, value: product.origin },
+                  { label: t.product.expiry, value: product.expiry },
+                  { label: t.product.jan, value: product.jan },
                 ].map((row) => (
                   <tr key={row.label} className="border-b border-gray-100">
                     <td className="py-3 pr-6 text-gray-500 w-32 font-medium">{row.label}</td>
@@ -264,7 +264,7 @@ export default function ProductDetailPage() {
 
         {tab === "ingredients" && (
           <div className="max-w-2xl">
-            <h3 className="font-semibold text-gray-800 mb-4 text-lg">栄養成分表示（100mlあたり）</h3>
+            <h3 className="font-semibold text-gray-800 mb-4 text-lg">{t.product.nutritionTitle}</h3>
             <table className="w-full text-sm border-collapse">
               <tbody>
                 {[
@@ -281,24 +281,17 @@ export default function ProductDetailPage() {
                 ))}
               </tbody>
             </table>
-            <p className="text-xs text-gray-400 mt-4">
-              ※ 栄養成分値は目安です。商品によって多少異なる場合があります。
-            </p>
+            <p className="text-xs text-gray-400 mt-4">{t.product.nutritionNote}</p>
           </div>
         )}
 
         {tab === "returns" && (
           <div className="max-w-2xl prose prose-sm text-gray-600 space-y-4">
-            <h3 className="font-semibold text-gray-800 text-lg">返品・交換について</h3>
+            <h3 className="font-semibold text-gray-800 text-lg">{t.product.returnsTitle}</h3>
+            <p>{t.product.returnsBody1}</p>
+            <p>{t.product.returnsBody2}</p>
             <p>
-              商品到着後7日以内にお申し出ください。未開封・未使用の商品に限り、返品・交換を承ります。
-            </p>
-            <p>
-              お客様のご都合による返品・交換の場合、返送料はお客様のご負担となります。
-              不良品・誤送品の場合は当社が送料を負担いたします。
-            </p>
-            <p>
-              詳細は<Link to="/contact" className="text-green-600 hover:underline">お問い合わせ</Link>よりご連絡ください。
+              <Link to="/contact" className="text-green-600 hover:underline">{t.product.returnsContact}</Link>
             </p>
           </div>
         )}
@@ -306,8 +299,8 @@ export default function ProductDetailPage() {
         {tab === "reviews" && (
           <div className="max-w-2xl">
             <div className="text-center py-10 text-gray-400">
-              <p>まだレビューはありません</p>
-              <p className="text-sm mt-1">最初のレビューを書いてみませんか？</p>
+              <p>{t.product.noReviews}</p>
+              <p className="text-sm mt-1">{t.product.firstReview}</p>
             </div>
           </div>
         )}

@@ -21,7 +21,7 @@ export default function LoginPage() {
             <span className="text-white font-bold text-2xl">U</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-800">{t.login.title}</h1>
-          <p className="text-gray-500 text-sm mt-1">U Ma! Fruitsへようこそ</p>
+          <p className="text-gray-500 text-sm mt-1">{t.login.welcome}</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -34,7 +34,7 @@ export default function LoginPage() {
                 value={form.id}
                 onChange={handleChange}
                 required
-                placeholder="ユーザーID"
+                placeholder={t.login.id}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-transparent transition-all"
               />
             </div>
@@ -65,7 +65,7 @@ export default function LoginPage() {
 
           <div className="mt-6 text-center">
             <p className="text-gray-500 text-sm">
-              アカウントをお持ちでない方は{" "}
+              {t.login.noAccount}{" "}
               <a href="#" className="text-green-600 font-medium hover:underline">
                 {t.login.register}
               </a>
