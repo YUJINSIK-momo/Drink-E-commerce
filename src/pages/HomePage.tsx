@@ -55,6 +55,41 @@ const reviews = [
   },
 ]
 
+function SectionHeader({
+  label,
+  title,
+  to,
+  linkLabel,
+  color = "green",
+}: {
+  label: string
+  title: string
+  to: string
+  linkLabel: string
+  color?: "green" | "orange"
+}) {
+  const accent = color === "orange" ? "text-orange-500" : "text-green-600"
+  const linkColor = color === "orange"
+    ? "text-orange-500 hover:text-orange-700 border-orange-400 hover:bg-orange-50"
+    : "text-green-600 hover:text-green-800 border-green-400 hover:bg-green-50"
+
+  return (
+    <div className="flex flex-col items-center text-center mb-10">
+      <p className={`${accent} text-xs font-bold tracking-widest uppercase mb-2`}>{label}</p>
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">{title}</h2>
+      <Link
+        to={to}
+        className={`inline-flex items-center gap-1 text-sm font-medium border rounded-full px-5 py-1.5 transition-colors ${linkColor}`}
+      >
+        {linkLabel}
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </Link>
+    </div>
+  )
+}
+
 export default function HomePage() {
   const { t } = useLanguage()
   const [heroIndex, setHeroIndex] = useState(0)
@@ -72,9 +107,9 @@ export default function HomePage() {
   const featuredVeges = products.filter((p) => p.category === "vegetables").slice(0, 3)
 
   return (
-    <div>
-      {/* Hero Carousel */}
-      <section className="relative h-[70vh] min-h-[480px] max-h-[700px] overflow-hidden">
+    <div className="w-full">
+      {/* ── Hero Carousel ── */}
+      <section className="relative h-[70vh] min-h-[480px] max-h-[700px] overflow-hidden w-full">
         {heroSlides.map((slide, i) => (
           <div
             key={i}
@@ -87,19 +122,20 @@ export default function HomePage() {
               alt={slide.titleJa}
               className="w-full h-full object-cover"
               onError={(e) => {
-                const t = e.target as HTMLImageElement
+                const el = e.target as HTMLImageElement
                 const colors = ["16a34a", "ea580c", "059669", "0d9488"]
-                t.src = `https://placehold.co/1920x700/${colors[i]}/ffffff?text=U+Ma!+Fruits`
+                el.src = `https://placehold.co/1920x700/${colors[i]}/ffffff?text=U+Ma!+Fruits`
               }}
             />
             <div className={`absolute inset-0 bg-gradient-to-r ${slide.bg} to-transparent`} />
-            <div className="absolute inset-0 flex items-center">
-              <div className="max-w-7xl mx-auto px-8 w-full">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-full max-w-6xl mx-auto px-6 md:px-12">
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: i === heroIndex ? 1 : 0, y: i === heroIndex ? 0 : 30 }}
                   transition={{ duration: 0.7 }}
+                  className="max-w-xl"
                 >
                   <p className="text-green-300 text-sm font-medium mb-2 tracking-widest uppercase">
                     U Ma! Fruits
@@ -128,7 +164,7 @@ export default function HomePage() {
           </div>
         ))}
 
-        {/* Carousel controls */}
+        {/* Dots */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3">
           {heroSlides.map((_, i) => (
             <button
@@ -155,7 +191,7 @@ export default function HomePage() {
           </button>
         </div>
 
-        {/* Arrow buttons */}
+        {/* Arrows */}
         <button
           onClick={() => setHeroIndex((i) => (i - 1 + heroSlides.length) % heroSlides.length)}
           className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm text-white rounded-full flex items-center justify-center hover:bg-white/40 transition-colors"
@@ -174,9 +210,9 @@ export default function HomePage() {
         </button>
       </section>
 
-      {/* Features bar */}
-      <section className="bg-green-700 text-white py-4">
-        <div className="max-w-7xl mx-auto px-4">
+      {/* ── Features Bar ── */}
+      <section className="bg-green-700 text-white py-4 w-full">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm">
             {[
               { icon: "🌿", text: "100%国産素材" },
@@ -193,32 +229,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Fruits Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <p className="text-green-600 text-sm font-medium tracking-wide mb-1">FRUITS</p>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">{t.home.fruitsTitle}</h2>
-          </div>
-          <Link
+      {/* ── Fruits Section ── */}
+      <section className="w-full py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <SectionHeader
+            label="FRUITS"
+            title={t.home.fruitsTitle}
             to="/fruits"
-            className="text-green-600 font-medium text-sm hover:text-green-700 flex items-center gap-1"
-          >
-            {t.allProducts}
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {featuredFruits.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+            linkLabel={t.allProducts}
+            color="green"
+          />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {featuredFruits.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Brand Story Banner */}
-      <section className="relative py-20 overflow-hidden bg-gradient-to-br from-green-800 to-emerald-600">
+      {/* ── Brand Story Banner ── */}
+      <section className="relative py-20 overflow-hidden bg-gradient-to-br from-green-800 to-emerald-600 w-full">
         <div className="absolute inset-0 opacity-10">
           <img
             src={`${BASE}/images/bg.jpg`}
@@ -227,64 +257,56 @@ export default function HomePage() {
             onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
           />
         </div>
-        <div className="relative max-w-7xl mx-auto px-4">
-          <div className="max-w-2xl">
-            <p className="text-green-300 text-sm tracking-widest uppercase mb-3">Brand Story</p>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-6 leading-tight">
-              {t.home.brandTitle}
-            </h2>
-            <p className="text-white/85 text-base leading-relaxed mb-8">
-              {t.home.brandText}
-            </p>
-            <div className="flex gap-4 flex-wrap">
-              <Link
-                to="/brand"
-                className="bg-white text-green-700 px-8 py-3 rounded-full font-semibold hover:bg-green-50 transition-colors"
-              >
-                {t.home.brandCta}
-              </Link>
-              <Link
-                to="/company"
-                className="border border-white/50 text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors"
-              >
-                会社情報
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Vegetables Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <p className="text-orange-500 text-sm font-medium tracking-wide mb-1">VEGETABLES</p>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">{t.home.vegeTitle}</h2>
-          </div>
-          <Link
-            to="/vegetables"
-            className="text-orange-500 font-medium text-sm hover:text-orange-600 flex items-center gap-1"
-          >
-            {t.allProducts}
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          {featuredVeges.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </section>
-
-      {/* Seasonal / Food Know How */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <p className="text-green-600 text-sm font-medium tracking-wide mb-1 text-center">KNOWLEDGE</p>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-10">
-            {t.home.seasonalTitle}
+        <div className="relative max-w-3xl mx-auto px-6 text-center">
+          <p className="text-green-300 text-xs font-bold tracking-widest uppercase mb-3">Brand Story</p>
+          <h2 className="text-white text-3xl md:text-4xl font-bold mb-6 leading-tight">
+            {t.home.brandTitle}
           </h2>
+          <p className="text-white/85 text-base leading-relaxed mb-8 max-w-xl mx-auto">
+            {t.home.brandText}
+          </p>
+          <div className="flex gap-4 flex-wrap justify-center">
+            <Link
+              to="/brand"
+              className="bg-white text-green-700 px-8 py-3 rounded-full font-semibold hover:bg-green-50 transition-colors"
+            >
+              {t.home.brandCta}
+            </Link>
+            <Link
+              to="/company"
+              className="border border-white/50 text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors"
+            >
+              会社情報
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Vegetables Section ── */}
+      <section className="w-full py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <SectionHeader
+            label="VEGETABLES"
+            title={t.home.vegeTitle}
+            to="/vegetables"
+            linkLabel={t.allProducts}
+            color="orange"
+          />
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {featuredVeges.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Knowledge / Seasonal ── */}
+      <section className="bg-gray-50 py-16 w-full">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <p className="text-green-600 text-xs font-bold tracking-widest uppercase mb-2">KNOWLEDGE</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">{t.home.seasonalTitle}</h2>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {[
               { img: `${BASE}/images/partners_img1.jpg`, label: "りんごの秘密" },
@@ -315,37 +337,39 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Reviews */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <p className="text-green-600 text-sm font-medium tracking-wide mb-1 text-center">REVIEWS</p>
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-10">
-          {t.home.reviewTitle}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {reviews.map((review, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-              <div className="flex gap-0.5 mb-3">
-                {Array.from({ length: review.rating }).map((_, j) => (
-                  <svg key={j} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                  </svg>
-                ))}
+      {/* ── Reviews ── */}
+      <section className="w-full py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-10">
+            <p className="text-green-600 text-xs font-bold tracking-widest uppercase mb-2">REVIEWS</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">{t.home.reviewTitle}</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {reviews.map((review, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <div className="flex gap-0.5 mb-3">
+                  {Array.from({ length: review.rating }).map((_, j) => (
+                    <svg key={j} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">"{review.text}"</p>
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-gray-800 text-sm">{review.name}</span>
+                  <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                    {review.product}
+                  </span>
+                </div>
               </div>
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">"{review.text}"</p>
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-gray-800 text-sm">{review.name}</span>
-                <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                  {review.product}
-                </span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-green-500 to-emerald-600 py-16 text-center">
-        <div className="max-w-2xl mx-auto px-4">
+      {/* ── CTA ── */}
+      <section className="bg-gradient-to-r from-green-500 to-emerald-600 py-20 text-center w-full">
+        <div className="max-w-2xl mx-auto px-6">
           <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">{t.home.ctaTitle}</h2>
           <p className="text-white/90 text-lg mb-8">{t.home.ctaText}</p>
           <Link

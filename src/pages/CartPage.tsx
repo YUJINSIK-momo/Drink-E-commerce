@@ -7,7 +7,7 @@ export default function CartPage() {
   const { items, removeItem, updateQuantity, total } = useCart()
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-4xl mx-auto px-6 py-12">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 flex items-center gap-2 mb-8">
         <Link to="/" className="hover:text-gray-700">Home</Link>

@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
+*, *::before, *::after {
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Noto Sans JP', 'Noto Sans KR', sans-serif;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: 'Noto Sans JP', 'Noto Sans KR', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #333;
@@ -16,4 +17,6 @@ body {
 #root {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

@@ -21,7 +21,7 @@ export default function ProductDetailPage() {
 
   if (!product) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+      <div className="max-w-6xl mx-auto px-6 py-20 text-center">
         <p className="text-gray-500 text-lg">商品が見つかりません</p>
         <Link to="/" className="text-green-600 hover:underline mt-4 block">
           ホームに戻る
@@ -54,7 +54,7 @@ export default function ProductDetailPage() {
   ]
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-6 py-8">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 flex items-center gap-2 mb-8 flex-wrap">
         <Link to="/" className="hover:text-gray-700">Home</Link>

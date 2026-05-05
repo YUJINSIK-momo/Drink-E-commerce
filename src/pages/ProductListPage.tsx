@@ -62,7 +62,7 @@ export default function ProductListPage({ category }: Props) {
       </div>
 
       {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="max-w-6xl mx-auto px-6 py-4">
         <nav className="text-sm text-gray-500 flex items-center gap-2">
           <a href="/" className="hover:text-gray-700">Home</a>
           <span>/</span>
@@ -71,7 +71,7 @@ export default function ProductListPage({ category }: Props) {
       </div>
 
       {/* Filter */}
-      <div className="max-w-7xl mx-auto px-4 mb-8">
+      <div className="max-w-6xl mx-auto px-6 mb-8">
         <div className="flex items-center gap-3 flex-wrap">
           <span className="text-sm text-gray-500 font-medium">フィルター:</span>
           {(["all", "new", "sale"] as const).map((f) => (
@@ -94,7 +94,7 @@ export default function ProductListPage({ category }: Props) {
       </div>
 
       {/* Products Grid */}
-      <div className="max-w-7xl mx-auto px-4 pb-16">
+      <div className="max-w-6xl mx-auto px-6 pb-16">
         {filtered.length === 0 ? (
           <div className="text-center py-16 text-gray-400">
             <p className="text-lg">該当する商品がありません</p>

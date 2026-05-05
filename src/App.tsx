@@ -21,9 +21,9 @@ export default function App() {
     <BrowserRouter basename="/Drink-E-commerce">
       <LanguageProvider>
         <CartProvider>
-          <div className="flex flex-col min-h-screen">
+          <div className="flex flex-col min-h-screen w-full">
             <Header />
-            <main className="flex-1">
+            <main className="flex-1 w-full">
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/fruits" element={<ProductListPage category="fruits" />} />

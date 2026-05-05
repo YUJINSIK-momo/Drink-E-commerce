@@ -26,7 +26,7 @@ export default function BrandPage() {
       </div>
 
       {/* Breadcrumb */}
-      <div className="max-w-4xl mx-auto px-4 py-4">
+      <div className="max-w-4xl mx-auto px-6 py-4">
         <nav className="text-sm text-gray-500 flex items-center gap-2">
           <Link to="/" className="hover:text-gray-700">Home</Link>
           <span>/</span>
@@ -35,7 +35,7 @@ export default function BrandPage() {
       </div>
 
       {/* Story sections */}
-      <div className="max-w-4xl mx-auto px-4 py-12 space-y-20">
+      <div className="max-w-4xl mx-auto px-6 py-12 space-y-20">
 
         {/* Section 1 */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">

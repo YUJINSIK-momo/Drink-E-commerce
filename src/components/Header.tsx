@@ -30,7 +30,7 @@ export default function Header() {
         🌿 100%国産フルーツ&ベジタブルジュース | 3000円以上購入で送料無料
       </div>
 
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 flex-shrink-0">

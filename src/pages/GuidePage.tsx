@@ -89,7 +89,7 @@ export default function GuidePage() {
 
   if (!content) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-6 py-12">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">{t.guide.title}</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
@@ -121,7 +121,7 @@ export default function GuidePage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
+    <div className="max-w-3xl mx-auto px-6 py-12">
       <nav className="text-sm text-gray-500 flex items-center gap-2 mb-8">
         <Link to="/" className="hover:text-gray-700">Home</Link>
         <span>/</span>
