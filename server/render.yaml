@@ -7,7 +7,10 @@ services:
     runtime: node
     rootDir: server
     plan: free
-    buildCommand: npm install && npm run build && npx prisma migrate deploy
+    # --include=dev: Render는 빌드 시 NODE_ENV=production이라 devDeps(nest cli·ts-node)를
+    #   빼버린다. 빌드에 필요하므로 강제로 포함시킨다.
+    # migrate deploy → 테이블 생성, seed → 상품 7종(멱등 upsert)
+    buildCommand: npm install --include=dev && npm run build && npx prisma migrate deploy && npm run seed
     startCommand: node dist/main
     healthCheckPath: /health
     envVars:
