@@ -1,10 +1,71 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useLanguage } from "../context/LanguageContext"
 import { useCart } from "../context/CartContext"
+import { createOrder, type OrderResult } from "../api/client"
 
 export default function CartPage() {
-  const { t } = useLanguage()
-  const { items, removeItem, updateQuantity, total } = useCart()
+  const { t, lang } = useLanguage()
+  const { items, removeItem, updateQuantity, clearCart, total } = useCart()
+  const [order, setOrder] = useState<OrderResult | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+
+  const handleCheckout = async () => {
+    if (items.length === 0 || submitting) return
+    setSubmitting(true)
+    try {
+      const result = await createOrder(
+        items.map((i) => ({ productId: i.id, quantity: i.quantity })),
+      )
+      setOrder(result)
+      clearCart()
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  // 주문 완료 화면 (서버가 계산한 금액 · 주문번호 표시)
+  if (order) {
+    const title = { ja: "ご注文ありがとうございます", ko: "주문이 완료되었습니다", en: "Order placed" }[lang]
+    const orderNoLabel = { ja: "注文番号", ko: "주문번호", en: "Order No." }[lang]
+    const totalLabel = { ja: "合計", ko: "합계", en: "Total" }[lang]
+    const demoNote = {
+      ja: "※ デモ環境：APIが未接続のため擬似的に生成された注文です。",
+      ko: "※ 데모 환경: API가 연결되지 않아 시뮬레이션된 주문입니다.",
+      en: "※ Demo: API not connected, so this order was simulated.",
+    }[lang]
+    return (
+      <div className="max-w-2xl mx-auto px-6 py-16 text-center">
+        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
+          <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">{title}</h1>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 text-left space-y-3 mb-6">
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-500">{orderNoLabel}</span>
+            <span className="font-mono text-gray-800">{order.id}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-500">Status</span>
+            <span className="font-semibold text-amber-600">{order.status}</span>
+          </div>
+          <div className="border-t border-gray-100 pt-3 flex justify-between font-bold text-gray-800">
+            <span>{totalLabel}</span>
+            <span>¥{order.totalPrice.toLocaleString()}</span>
+          </div>
+        </div>
+        {order.simulated && <p className="text-xs text-gray-400 mb-6">{demoNote}</p>}
+        <Link
+          to="/fruits"
+          className="inline-block bg-green-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors"
+        >
+          {t.cart.continueShopping}
+        </Link>
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12">
@@ -118,8 +179,12 @@ export default function CartPage() {
                   <span>¥{(total >= 3000 ? total : total + 500).toLocaleString()}</span>
                 </div>
               </div>
-              <button className="w-full bg-green-600 text-white py-3.5 rounded-full font-semibold hover:bg-green-700 transition-colors mb-3">
-                {t.cart.checkout}
+              <button
+                onClick={handleCheckout}
+                disabled={submitting}
+                className="w-full bg-green-600 text-white py-3.5 rounded-full font-semibold hover:bg-green-700 transition-colors mb-3 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {submitting ? "..." : t.cart.checkout}
               </button>
               <Link
                 to="/fruits"

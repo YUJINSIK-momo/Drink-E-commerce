@@ -1,0 +1,76 @@
+// Drink E-commerce — Prisma 스키마
+// 원본(Source of Truth): PostgreSQL. 상품 / 주문 / 주문항목 3개 모델.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id       String @id
+  category String // "fruits" | "vegetables"
+  slug     String @unique
+  image    String
+  images   String[]
+  price    Int
+  volume   String
+  origin   String
+  expiry   String
+  jan      String
+
+  // 영양정보 (flatten)
+  energy  String
+  protein String
+  fat     String
+  carbs   String
+  salt    String
+
+  // 다국어 필드 { ja, ko, en }
+  name        Json
+  flavor      Json
+  description Json
+
+  tags      String[]
+  isNew     Boolean @default(false)
+  isSale    Boolean @default(false)
+  salePrice Int?
+
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  status        String      @default("PENDING") // PENDING | PAID | CANCELLED
+  totalPrice    Int
+  customerName  String?
+  customerEmail String?
+  items         OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  // 주문 시점 가격 스냅샷 (이후 상품 가격이 바뀌어도 주문 금액은 고정)
+  unitPrice Int
+  quantity  Int
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+}

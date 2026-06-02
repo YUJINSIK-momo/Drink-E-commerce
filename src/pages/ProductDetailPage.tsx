@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams, Link, useNavigate } from "react-router-dom"
 import { useLanguage } from "../context/LanguageContext"
 import { useCart } from "../context/CartContext"
-import { getProductBySlug, getRelatedProducts } from "../data/products"
+import { fetchProductBySlug, fetchProducts } from "../api/client"
+import type { Product } from "../data/products"
 import ProductCard from "../components/ProductCard"
 
 type Tab = "detail" | "ingredients" | "returns" | "reviews"
@@ -13,11 +14,40 @@ export default function ProductDetailPage() {
   const { addItem } = useCart()
   const navigate = useNavigate()
 
-  const product = getProductBySlug(slug || "")
+  const [product, setProduct] = useState<Product | undefined>(undefined)
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
   const [quantity, setQuantity] = useState(1)
   const [tab, setTab] = useState<Tab>("detail")
   const [added, setAdded] = useState(false)
   const [selectedImage, setSelectedImage] = useState(0)
+
+  // 상품 + 연관 상품을 API에서 불러온다 (실패 시 정적 데이터로 폴백)
+  useEffect(() => {
+    let active = true
+    setLoading(true)
+    setSelectedImage(0)
+    fetchProductBySlug(slug || "").then(async (found) => {
+      if (!active) return
+      setProduct(found)
+      if (found) {
+        const all = await fetchProducts(found.category)
+        if (active) setRelatedProducts(all.filter((p) => p.id !== found.id).slice(0, 3))
+      }
+      setLoading(false)
+    })
+    return () => {
+      active = false
+    }
+  }, [slug])
+
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto px-6 py-24 text-center">
+        <div className="w-10 h-10 mx-auto border-2 border-gray-200 border-t-green-500 rounded-full animate-spin" />
+      </div>
+    )
+  }
 
   if (!product) {
     return (
@@ -30,7 +60,6 @@ export default function ProductDetailPage() {
     )
   }
 
-  const relatedProducts = getRelatedProducts(product)
   const displayPrice = product.isSale && product.salePrice ? product.salePrice : product.price
 
   const handleAddToCart = () => {

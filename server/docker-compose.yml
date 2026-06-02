@@ -1,0 +1,17 @@
+# 로컬 개발용 PostgreSQL — 실행: docker compose up -d
+# 이 설정과 .env.example 의 DATABASE_URL 이 서로 맞춰져 있다.
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: drink
+      POSTGRES_PASSWORD: drink
+      POSTGRES_DB: drink
+    ports:
+      - "5432:5432"
+    volumes:
+      - drink_pgdata:/var/lib/postgresql/data
+
+volumes:
+  drink_pgdata:

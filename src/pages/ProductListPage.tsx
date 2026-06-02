@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useLanguage } from "../context/LanguageContext"
 import ProductCard from "../components/ProductCard"
-import { products } from "../data/products"
+import { fetchProducts } from "../api/client"
+import type { Product } from "../data/products"
 
 interface Props {
   category: "fruits" | "vegetables"
@@ -12,9 +13,24 @@ const BASE = "/Drink-E-commerce"
 export default function ProductListPage({ category }: Props) {
   const { lang, t } = useLanguage()
   const [filter, setFilter] = useState<"all" | "new" | "sale">("all")
+  const [items, setItems] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const categoryProducts = products.filter((p) => p.category === category)
-  const filtered = categoryProducts.filter((p) => {
+  // 상품 목록을 API에서 불러온다 (실패 시 정적 데이터로 폴백)
+  useEffect(() => {
+    let active = true
+    setLoading(true)
+    fetchProducts(category).then((data) => {
+      if (!active) return
+      setItems(data)
+      setLoading(false)
+    })
+    return () => {
+      active = false
+    }
+  }, [category])
+
+  const filtered = items.filter((p) => {
     if (filter === "new") return p.isNew
     if (filter === "sale") return p.isSale
     return true
@@ -95,7 +111,13 @@ export default function ProductListPage({ category }: Props) {
 
       {/* Products Grid */}
       <div className="max-w-6xl mx-auto px-6 pb-16">
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="aspect-[3/4] rounded-2xl bg-gray-100 animate-pulse" />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="text-center py-16 text-gray-400">
             <p className="text-lg">該当する商品がありません</p>
           </div>
